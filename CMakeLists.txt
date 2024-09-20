@@ -20,7 +20,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
         target_include_directories(cadastro 
             PUBLIC 
-            ${CMAKE_CURRENT_LIST_DIR}/include
+            ${CMAKE_CURRENT_LIST_DIR}/include/
 
         )
 

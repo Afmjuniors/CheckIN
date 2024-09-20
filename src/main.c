@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <person.h>
+
+#define DATABASE "database.txt"
 
 #define TEXT_ADD_PERSON "1. Add a new person"
 #define TEXT_REMOVE_PERSON "2. Remove a person"
@@ -13,12 +16,15 @@
 
 void print_menu(void);
 bool option_select(int option);
+int count_items(void);
 
 void person_add_new(void);
 void person_delete(void);
 void person_update(void);
 void person_list(void);
 void person_find(void);
+
+bool is_database_exists(void);
 
 int main(void)
 {
@@ -77,21 +83,238 @@ bool option_select(int option)
 
 void person_add_new(void)
 {
-    printf("Add a new User\n");
+
+    person_t person;
+    FILE *f;
+
+    printf("Type a name: ");
+    fgets(person.name, PERSON_NAME_LEN - 1, stdin);
+    person.name[strlen(person.name) - 1] = 0;
+    printf("Type an address ");
+    fgets(person.address, PERSON_ADDRESS_LEN - 1, stdin);
+    person.address[strlen(person.address) - 1] = 0;
+    printf("Type an age: ");
+    scanf("%d", &person.age);
+    getchar();
+
+    if (is_database_exists() == false)
+    {
+        f = fopen(DATABASE, "w");
+    }
+    else
+    {
+        f = fopen(DATABASE, "a");
+    }
+
+    char format[250] = "";
+    snprintf(format, 250, "%s, %s, %d\n", person.name, person.address, person.age);
+    fprintf(f, "%s", format);
+    fclose(f);
 }
 void person_delete(void)
 {
-    printf("Remove a User\n");
+    int items = count_items();
+    person_t *persons = (person_t *)malloc(sizeof(person_t) * items);
+    if (persons == NULL)
+        return;
+    FILE *f = fopen(DATABASE, "r");
+    for (size_t i = 0; i < items; i++)
+    {
+        char buffer[240] = "";
+        fgets(buffer, 240, f);
+        char *data = strtok(buffer, ",");
+        strncpy(persons[i].name, data, PERSON_NAME_LEN);
+        data = strtok(NULL, ",");
+        strncpy(persons[i].address, data, PERSON_ADDRESS_LEN);
+        data = strtok(NULL, ",");
+        persons[i].age = atoi(data);
+    }
+    fclose(f);
+    char name_delete[PERSON_NAME_LEN] = "";
+    printf("Type name to delete: ");
+    fgets(name_delete, PERSON_NAME_LEN - 1, stdin);
+    name_delete[strlen(name_delete) - 1] = 0;
+    for (size_t i = 0; i < items; i++)
+    {
+        if (strcmp(name_delete, persons[i].name) == 0)
+        {
+            memset(&persons[i], 0, sizeof(person_t));
+            break;
+        }
+    }
+
+    f = fopen(DATABASE, "w");
+    for (size_t i = 0; i < items; i++)
+    {
+        if (persons[i].name[0] == '\0' || persons[i].address[0] == '\0')
+            continue;
+        fprintf(f, "%s, %s, %d\n", persons[i].name, persons[i].address, persons[i].age);
+    }
+    free(persons);
+    fclose(f);
 }
 void person_update(void)
 {
-    printf("Update a User\n");
+    int id = -1;
+    int items = count_items();
+    person_t *persons = (person_t *)malloc(sizeof(person_t) * items);
+    if (persons == NULL)
+        return;
+    FILE *f = fopen(DATABASE, "r");
+    for (size_t i = 0; i < items; i++)
+    {
+        char buffer[240] = "";
+        fgets(buffer, 240, f);
+        char *data = strtok(buffer, ",");
+        strncpy(persons[i].name, data, PERSON_NAME_LEN);
+        data = strtok(NULL, ",");
+        strncpy(persons[i].address, data, PERSON_ADDRESS_LEN);
+        data = strtok(NULL, ",");
+        persons[i].age = atoi(data);
+    }
+    fclose(f);
+
+    char name_update[PERSON_NAME_LEN] = "";
+    printf("Type name to update: ");
+    fgets(name_update, PERSON_NAME_LEN - 1, stdin);
+    name_update[strlen(name_update) - 1] = 0;
+    for (size_t i = 0; i < items; i++)
+    {
+        if (strcmp(name_update, persons[i].name) == 0)
+        {
+            id = i;
+            break;
+        }
+    }
+    if (id != -1)
+    {
+        memset(&persons[id], 0, sizeof(person_t));
+
+        printf("Type a name: ");
+        fgets(persons[id].name, PERSON_NAME_LEN - 1, stdin);
+        persons[id].name[strlen(persons[id].name) - 1] = 0;
+        printf("Type an address ");
+        fgets(persons[id].address, PERSON_ADDRESS_LEN - 1, stdin);
+        persons[id].address[strlen(persons[id].address) - 1] = 0;
+        printf("Type an age: ");
+        scanf("%d", &persons[id].age);
+        getchar();
+    }
+
+    f = fopen(DATABASE, "w");
+    for (size_t i = 0; i < items; i++)
+    {
+        if (persons[i].name[0] == '\0' || persons[i].address[0] == '\0')
+            continue;
+        fprintf(f, "%s, %s, %d\n", persons[i].name, persons[i].address, persons[i].age);
+    }
+    free(persons);
+    fclose(f);
 }
 void person_list(void)
 {
-    printf("List all Users\n");
+    FILE *f;
+    if (is_database_exists())
+    {
+        f = fopen(DATABASE, "r");
+    }
+    else
+    {
+        return;
+    }
+    char c = fgetc(f);
+    while (c != EOF)
+    {
+
+        printf("%c", c);
+        c = fgetc(f);
+    }
+    fclose(f);
 }
 void person_find(void)
 {
-    printf("Find a User\n");
+
+    char name_find[PERSON_NAME_LEN] = "";
+    printf("Type name to find: ");
+    fgets(name_find, PERSON_NAME_LEN - 1, stdin);
+    name_find[strlen(name_find) - 1] = 0;
+
+    FILE *f;
+    if (is_database_exists())
+    {
+        f = fopen(DATABASE, "r");
+        fseek(f, 0, SEEK_END);
+        long size = ftell(f);
+        rewind(f);
+        char *buffer = calloc(1, size + 1);
+        size_t len = fread(buffer, sizeof(char), size, f);
+        if (ferror(f) != 0)
+        {
+            // erro
+        }
+        else
+        {
+            buffer[len - 1] = '\0';
+        }
+        char *name_encounter = strstr(buffer, name_find);
+        if (name_encounter != NULL)
+        {
+            char c;
+            for (int i = 0;; i++)
+            {
+                c = name_encounter[i];
+                if (c == '\n')
+                    break;
+                else
+                    putc(c, stdout);
+            }
+            putc('\n', stdout);
+        }
+        free(buffer);
+        fclose(f);
+    }
+    else
+    {
+        return;
+    }
+
+
+}
+
+bool is_database_exists(void)
+{
+    bool status = false;
+    FILE *f = fopen(DATABASE, "r");
+    if (f != NULL)
+    {
+        fclose(f);
+        status = true;
+    }
+    return status;
+}
+
+int count_items(void)
+{
+    FILE *f;
+    int items = 0;
+    if (is_database_exists())
+    {
+        f = fopen(DATABASE, "r");
+    }
+    else
+    {
+        return -1;
+    }
+
+    char c;
+    while ((c = fgetc(f)) != EOF)
+    {
+        if (c == '\n')
+        {
+            items++;
+        }
+    }
+
+    fclose(f);
+    return items;
 }
