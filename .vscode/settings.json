@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "use_cases.h": "c"
+        "use_cases.h": "c",
+        "repository.h": "c",
+        "person.h": "c",
+        "stdlib.h": "c"
     }
 }

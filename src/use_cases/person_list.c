@@ -1,24 +1,20 @@
 #include <stdio.h>
-#include <database.h>
+#include <use_cases.h>
+#include <stdlib.h>
 
 
-void use_case_person_list(void)
+
+
+void use_case_person_list(repository_base *repository)
 {
-    FILE *f;
 
-    if(db_is_database_exists())
-    {
-        f = fopen(DB_DATABASE_FILE, "r");
-    }
-    else 
-        return;
+person_t *person_list;
+int items;
+repository->recover_list(repository->object, &person_list, &items);
 
-    char c = fgetc(f);
-    while(c != EOF)
-    {
-        printf("%c", c);
-        c = fgetc(f);
-    }
+for(int i=0; i< items; i++){
+    printf("%d: %s %s %d\n", i+1, person_list[i].name, person_list[i].address, person_list[i].age);
+}
+free(person_list);
 
-    fclose(f);
 }
