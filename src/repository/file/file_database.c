@@ -5,13 +5,14 @@
 
 static bool file_is_database_exists(void);
 static int file_count_items(void);
-static bool file_store(void *object, const person_t *person);
+static bool file_store(void *object, store_action_t *store);
 static bool file_store_list(void *object, const person_t *person_list, int items_amount);
 static bool file_recover_list(void *object, person_t **person_list, int *items_amount);
 static void person_parser(const char *buffer, person_t *person);
 
+static bool file_insert(void *object, const person_t *person);
 
-static bool file_store(void *object, const person_t *person)
+static bool file_insert(void *object, const person_t *person)
 {
     FILE *f;
     if (file_is_database_exists() == false)
@@ -29,7 +30,32 @@ static bool file_store(void *object, const person_t *person)
 
     return true;
 }
-static bool file_store_list(void *object, const person_t *person_list, int items_amount)
+
+
+static bool file_store(void *object, store_action_t *store)
+{
+    bool state = false;
+
+    switch (store->action)
+    {
+    case repo_insert:
+        state = file_insert(object, store->person);
+        break;
+            case repo_delete:
+            case repo_update:
+        state = file_store_list(object, store->person, store->amount);
+        break;
+    
+    
+    
+    default:
+        break;
+    }
+
+    return state;
+
+}
+static bool file_store_list(void *object,  const person_t *person_list, int items_amount)
 {
     FILE *f;
 
@@ -77,7 +103,6 @@ repository_base *file_crerare_database(void)
     {
         repository->object = NULL;
         repository->store = file_store;
-        repository->store_list = file_store_list;
         repository->recover_list = file_recover_list;
     }
 }
