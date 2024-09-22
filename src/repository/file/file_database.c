@@ -6,13 +6,13 @@
 static bool file_is_database_exists(void);
 static int file_count_items(void);
 static bool file_store(void *object, store_action_t *store);
-static bool file_store_list(void *object, const person_t *person_list, int items_amount);
-static bool file_recover_list(void *object, person_t **person_list, int *items_amount);
-static void person_parser(const char *buffer, person_t *person);
+static bool file_store_list(void *object, const check_t *check_list, int items_amount);
+static bool file_recover_list(void *object, check_t **check_list, int *items_amount);
+static void check_parser(const char *buffer, check_t *check);
 
-static bool file_insert(void *object, const person_t *person);
+static bool file_insert(void *object, const check_t *check);
 
-static bool file_insert(void *object, const person_t *person)
+static bool file_insert(void *object, const check_t *check)
 {
     FILE *f;
     if (file_is_database_exists() == false)
@@ -23,8 +23,9 @@ static bool file_insert(void *object, const person_t *person)
     {
         f = fopen(DB_DATABASE_FILE, "a");
     }
-    char format[250] = "";
-    snprintf(format, 250, DB_DATABASE_FORMAT, person->name, person->address, person->age);
+    char format[200] = "";
+    
+    snprintf(format, 200, DB_DATABASE_FORMAT, check->id, check->date_time, check->timestamp, check->type ,check->description);
     fprintf(f, "%s", format);
     fclose(f);
 
@@ -39,11 +40,11 @@ static bool file_store(void *object, store_action_t *store)
     switch (store->action)
     {
     case repo_insert:
-        state = file_insert(object, store->person);
+        state = file_insert(object, store->check);
         break;
             case repo_delete:
             case repo_update:
-        state = file_store_list(object, store->person, store->amount);
+        state = file_store_list(object, store->check, store->amount);
         break;
     
     
@@ -55,28 +56,28 @@ static bool file_store(void *object, store_action_t *store)
     return state;
 
 }
-static bool file_store_list(void *object,  const person_t *person_list, int items_amount)
+static bool file_store_list(void *object,  const check_t *check_list, int items_amount)
 {
     FILE *f;
 
     f = fopen(DB_DATABASE_FILE, "w");
     for (int i = 0; i < items_amount; i++)
     {
-        if (person_list[i].name[0] == '\0' || person_list[i].address[0] == '\0')
+        if (check_list[i].name[0] == '\0' || check_list[i].address[0] == '\0')
             continue;
 
-        fprintf(f, DB_DATABASE_FORMAT, person_list[i].name, person_list[i].address, person_list[i].age);
+        fprintf(f, DB_DATABASE_FORMAT, check_list[i].name, check_list[i].address, check_list[i].age);
     }
     fclose(f);
     return true;
 }
-static bool file_recover_list(void *object, person_t **person_list, int *items_amount)
+static bool file_recover_list(void *object, check_t **check_list, int *items_amount)
 {
     int items = file_count_items();
     *items_amount = items;
 
-    person_t *_person_list = (person_t *)malloc(sizeof(person_t) * items);
-    if (_person_list == NULL)
+    check_t *_check_list = (check_t *)malloc(sizeof(check_t) * items);
+    if (_check_list == NULL)
         return false;
 
     FILE *f = fopen(DB_DATABASE_FILE, "r");
@@ -86,10 +87,10 @@ static bool file_recover_list(void *object, person_t **person_list, int *items_a
         char buffer[240] = "";
         fgets(buffer, 240, f);
 
-        person_parser(buffer, &_person_list[i]);
+        check_parser(buffer, &_check_list[i]);
     }
 
-    *person_list = _person_list;
+    *check_list = _check_list;
 
     fclose(f);
 
@@ -147,16 +148,79 @@ int file_count_items(void)
     return items;
 }
 
-static void person_parser(const char *buffer, person_t *person)
+static void check_parser(const char *buffer, check_t *check)
 {
     char *temp = (char *)buffer;
-    if(person == NULL || buffer == NULL)
+    if(check == NULL || buffer == NULL)
         return ;
 
     char *data = strtok(temp, ",");
-    strncpy(person->name, data, PERSON_NAME_LEN);
+    strncpy(check->name, data, check_NAME_LEN);
     data = strtok(NULL, ",");
-    strncpy(person->address, data, PERSON_ADDRESS_LEN);
+    strncpy(check->address, data, check_ADDRESS_LEN);
     data = strtok(NULL, ",");
-    person->age = atoi(data);
+    check->age = atoi(data);
 }
+
+// void getComputerName(char *name, size_t len) {
+//     FILE *fp = popen("hostname", "r");
+//     if (fp == NULL) {
+//         perror("Falha ao obter o nome do computador");
+//         exit(1);
+//     }
+//     fgets(name, len, fp);
+//     // Remove o \n do final da string
+//     name[strcspn(name, "\n")] = 0;
+//     pclose(fp);
+// }
+// void getCurrentTimestamp(char *timestamp, size_t len) {
+//     time_t now = time(NULL);
+//     strftime(timestamp, len, "%Y-%m-%d %H:%M:%S", localtime(&now));
+// }
+// int fileExists(const char *filename) {
+//     FILE *file = fopen(filename, "r");
+//     if (file) {
+//         fclose(file);
+//         return 1;
+//     }
+//     return 0;
+// }
+
+// void addEntry(const char *type, const char *comment) {
+//     FILE *file = fopen(FILENAME, "a");
+//     if (file == NULL) {
+//         perror("Falha ao abrir o arquivo");
+//         exit(1);
+//     }
+
+//     char computerName[256];
+//     char timestamp[20];
+//     getComputerName(computerName, sizeof(computerName));
+//     getCurrentTimestamp(timestamp, sizeof(timestamp));
+
+//     // Escreve no arquivo: ID do usuário (nome do PC), data, timestamp e tipo (check-in ou check-out)
+//     fprintf(file, "%s,%s,%s,%s,%s\n", computerName, timestamp, timestamp, type, comment);
+
+//     fclose(file);
+// }
+
+// void checkIn() {
+//     char comment[256];
+//     printf("Digite um comentário sobre o trabalho de hoje: ");
+//     fgets(comment, sizeof(comment), stdin);
+//     comment[strcspn(comment, "\n")] = 0;
+
+//     addEntry("check-in", comment);
+//     printf("Check-in realizado com sucesso!\n");
+// }
+
+// // Função para processar check-out
+// void checkOut() {
+//     char comment[256];
+//     printf("Digite um comentário final sobre o trabalho de hoje: ");
+//     fgets(comment, sizeof(comment), stdin);
+//     comment[strcspn(comment, "\n")] = 0;
+
+//     addEntry("check-out", comment);
+//     printf("Check-out realizado com sucesso!\n");
+// }
