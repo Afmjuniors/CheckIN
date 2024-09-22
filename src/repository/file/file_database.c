@@ -96,7 +96,7 @@ static bool file_recover_list(void *object, person_t **person_list, int *items_a
     return true;
 }
 
-repository_base *file_crerare_database(void)
+repository_base *file_create_database(void)
 {
     repository_base *repository = (repository_base *)malloc(sizeof(repository_base));
     if (repository)
@@ -105,6 +105,7 @@ repository_base *file_crerare_database(void)
         repository->store = file_store;
         repository->recover_list = file_recover_list;
     }
+    return repository;
 }
 
 bool file_is_database_exists(void)

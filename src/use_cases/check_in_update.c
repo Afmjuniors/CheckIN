@@ -30,7 +30,7 @@ void use_case_person_update(repository_base *repository)
         store.id = id;
         store.action = repo_update;
         store.amount = items;
-        store.person = &person_list[id];
+        store.person = person_list;
         memset(&person_list[id], 0, sizeof(person_t));
         person_list[id] = person_create();
         repository->store(repository->object, &store);

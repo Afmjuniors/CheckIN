@@ -25,7 +25,6 @@ typedef struct
 {
     void *object;
     bool (*store)(void *object,  store_action_t *action);
-    // bool(*store_list)(void *object, const person_t *person_list, int items_amount);
     bool (*recover_list)(void *object, person_t **person_list, int *items_amount);
 } repository_base;
 

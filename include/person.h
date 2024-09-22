@@ -6,6 +6,7 @@
 
 typedef struct 
 {
+    int id;
     char name[PERSON_NAME_LEN];
     char address[PERSON_ADDRESS_LEN];
     int age;
