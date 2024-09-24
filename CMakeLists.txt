@@ -28,4 +28,6 @@ target_sources(cadastro
 target_include_directories(cadastro 
     PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/include 
+    ${CMAKE_CURRENT_LIST_DIR}/src/repository/file 
+
 )

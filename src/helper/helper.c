@@ -5,7 +5,6 @@
 #include <windows.h>
 #endif
 
-
 // Declaração das funções
 void getComputerName(char *name, int len);
 void getCurrentTimestamp(char *timestamp, int len);
