@@ -1,21 +1,28 @@
 #ifndef CHECK_H
 #define CHECK_H
 
-#define CHECK_DATETIME_LEN 25
-#define CHECK_TYPE_LEN 5
+#define CHECK_DATETIME_LEN 21
+#define CHECK_TYPE_LEN 8
 #define CHECK_DESCRIPTION_LEN 120
-#define CHECK_CUMPUTER_NAME_LEN 25
+#define CHECK_COMPUTER_NAME_LEN 256
+
+typedef enum
+{
+    check_in = 1,
+    check_out
+} type_check_t;
 
 typedef struct
 {
-    int id;
+    char computer_name[CHECK_COMPUTER_NAME_LEN];
     char date_time[CHECK_DATETIME_LEN];
     long timestamp;
-    char type[CHECK_TYPE_LEN];
+    type_check_t type;
     char description[CHECK_DESCRIPTION_LEN];
 } check_t;
 
-check_t check_create(void);
-char *check_input_date(void);
+check_t check_create(type_check_t type);
+check_t check_create_m(type_check_t type);
+check_t *check_input_date(void);
 
 #endif /* CHECK_H */

@@ -15,14 +15,14 @@ add_executable(cadastro "")
 target_sources(cadastro 
     PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/person.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/check.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/helper/helper.c
     ${CMAKE_CURRENT_LIST_DIR}/src/menu.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in_delete.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in_find.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in_list.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in_quit.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_in_update.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_last_type.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_out.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/file/file_database.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository_factory.c

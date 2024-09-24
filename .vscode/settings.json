@@ -3,6 +3,7 @@
         "use_cases.h": "c",
         "repository.h": "c",
         "person.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "time.h": "c"
     }
 }
