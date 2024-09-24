@@ -4,21 +4,15 @@
 
 static menu_options_struct_t options[] = 
     {
-        {.option = menu_option_add,    .command = use_case_person_add_new},
-        {.option = menu_option_remove, .command = use_case_person_delete},
-        {.option = menu_option_update, .command = use_case_person_update},
-        {.option = menu_option_list,   .command = use_case_person_list},
-        {.option = menu_option_find,   .command = use_case_person_find},
-        {.option = menu_option_quit,   .command = use_case_person_quit}
+        {.option = menu_option_add,    .command = use_case_check_in_new},
+        {.option = menu_option_find,   .command = use_case_check_find},
+        {.option = menu_option_quit,   .command = use_case_check_quit}
     };
 
 void menu_print(void)
 {
-    printf("%s\n", MENU_TEXT_ADD_PERSON);
-    printf("%s\n", MENU_TEXT_REMOVE_PERSON);
-    printf("%s\n", MENU_TEXT_UPDATE_PERSON);
-    printf("%s\n", MENU_TEXT_LIST_PERSON);
-    printf("%s\n", MENU_TEXT_FIND_PERSON);
+    printf("%s\n", MENU_TEXT_ADD);
+    printf("%s\n", MENU_TEXT_FIND);
     printf("%s\n", MENU_TEXT_EXIT);
     printf("%s",   MENU_TEXT_CURSOR);    
 }

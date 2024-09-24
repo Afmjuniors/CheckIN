@@ -16,14 +16,13 @@ target_sources(cadastro
     PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/database.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/person.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/helper/helper.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/check.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/menu.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_add.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_delete.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_find.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_list.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_quit.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_update.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_add.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_find.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_list.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/check_quit.c 
     )
 
 target_include_directories(cadastro 

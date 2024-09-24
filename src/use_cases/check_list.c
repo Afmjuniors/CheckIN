@@ -2,7 +2,7 @@
 #include <database.h>
 
 
-void use_case_person_list(void)
+void use_case_check_list(void)
 {
     FILE *f;
 

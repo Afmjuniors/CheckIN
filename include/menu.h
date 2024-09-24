@@ -3,20 +3,14 @@
 
 #include <stdbool.h>
 
-#define MENU_TEXT_ADD_PERSON     "1. Add a new person"
-#define MENU_TEXT_REMOVE_PERSON  "2. Remove a person"
-#define MENU_TEXT_UPDATE_PERSON  "3. Update a person"
-#define MENU_TEXT_LIST_PERSON    "4. List all persons"
-#define MENU_TEXT_FIND_PERSON    "5. Find a person"
-#define MENU_TEXT_EXIT           "6. exit program"
+#define MENU_TEXT_ADD     "1. Registrar novo ponto"
+#define MENU_TEXT_FIND    "2. Mostrar ultimo registro"
+#define MENU_TEXT_EXIT           "3. Sair do programa"
 #define MENU_TEXT_CURSOR         "> "
 
 typedef enum 
 {
     menu_option_add = 1,
-    menu_option_remove,
-    menu_option_update,
-    menu_option_list,
     menu_option_find,
     menu_option_quit
 } menu_option_t;

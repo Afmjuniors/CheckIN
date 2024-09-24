@@ -15,6 +15,18 @@ bool db_is_database_exists(void)
     return status;
 }
 
+void encrypt(char *data, size_t data_len, int key) {
+    for (size_t i = 0; i < data_len; i++) {
+        data[i] += key;  
+    }
+}
+
+void decrypt(char *data, size_t data_len, int key) {
+    for (size_t i = 0; i < data_len; i++) {
+        data[i] -= key; 
+    }
+}
+
 int db_count_items(void)
 {
     FILE *f;
