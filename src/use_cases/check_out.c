@@ -4,12 +4,10 @@
 #include <check.h>
 #include <use_cases.h>
 
-void use_case_check_in(repository_base *repository)
+void use_case_check_out(repository_base *repository)
 {
-            printf("entrou aki1");
-
     store_action_t store;
-    check_t check = check_create(check_in);
+    check_t check = check_create(check_out);
 
     store.action = repo_insert;
     store.id = -1;
@@ -19,12 +17,10 @@ void use_case_check_in(repository_base *repository)
     repository->store(repository->object, &store);
 }
 
-void use_case_check_in_m(repository_base *repository)
+void use_case_check_out_m(repository_base *repository)
 {
-            printf("entrou aki1");
-
     store_action_t store;
-    check_t check = check_create_m(check_in);
+    check_t check = check_create_m(check_out);
 
     store.action = repo_insert;
     store.id = -1;

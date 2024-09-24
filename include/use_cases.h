@@ -1,10 +1,8 @@
 #ifndef USE_CASES_H
 #define USE_CASES_H
 
-#include <repository.h>
-
-void use_case_check_in(repository_base *repository);
-void use_case_check_out(repository_base *repository);
-void use_case_check_list(repository_base *repository);
-void use_case_check_quit(repository_base *repository);
+void use_case_check_in_new(void);
+void use_case_check_list(void);
+void use_case_check_find(void);
+void use_case_check_quit(void);
 #endif /* USE_CASES_H */
